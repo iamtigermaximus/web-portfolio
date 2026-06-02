@@ -165,14 +165,17 @@ const EmptyState = styled.div`
 interface CertificatesSectionProps {
   certificates: Certificate[];
   isLoading: boolean;
+  sectionNumber?: string;
 }
 
 export default function CertificatesSection({
   certificates,
   isLoading,
+  sectionNumber,
 }: CertificatesSectionProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { ref, isInView } = useScrollReveal();
+  const number = sectionNumber ?? "04 // certs";
 
   const selected = certificates.find((c) => c.id === selectedId);
 
@@ -182,7 +185,7 @@ export default function CertificatesSection({
         <SectionHeading
           title="Certificates"
           subtitle="Professional certifications and courses"
-          number="04 // certs"
+          number={number}
         />
         <EmptyState>
           <Spinner size={32} />
@@ -196,7 +199,7 @@ export default function CertificatesSection({
       <SectionHeading
         title="Certificates"
         subtitle="Professional certifications and courses"
-        number="04 // certs"
+        number={number}
       />
       <motion.div
         ref={ref}

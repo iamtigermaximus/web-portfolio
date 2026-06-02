@@ -120,11 +120,13 @@ const EmptyState = styled.div`
 interface SkillsSectionProps {
   skills: Skill[];
   isLoading: boolean;
+  sectionNumber?: string;
 }
 
-export default function SkillsSection({ skills, isLoading }: SkillsSectionProps) {
+export default function SkillsSection({ skills, isLoading, sectionNumber }: SkillsSectionProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const { ref, isInView } = useScrollReveal();
+  const number = sectionNumber ?? "02 // skills";
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(skills.map((s) => s.category)));
@@ -142,7 +144,7 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
   if (isLoading) {
     return (
       <Wrapper>
-        <SectionHeading title="Skills" subtitle="Technologies I work with" number="02 // skills" />
+        <SectionHeading title="Skills" subtitle="Technologies I work with" number={number} />
         <EmptyState>
           <Spinner size={32} />
         </EmptyState>
@@ -152,7 +154,7 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
 
   return (
     <Wrapper id="skills">
-      <SectionHeading title="Skills" subtitle="Technologies I work with" number="02 // skills" />
+      <SectionHeading title="Skills" subtitle="Technologies I work with" number={number} />
       <Tabs>
         {categories.map((cat) => (
           <Tab

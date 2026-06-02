@@ -142,15 +142,17 @@ const EmptyState = styled.div`
 interface ProjectsSectionProps {
   projects: Project[];
   isLoading: boolean;
+  sectionNumber?: string;
 }
 
-export default function ProjectsSection({ projects, isLoading }: ProjectsSectionProps) {
+export default function ProjectsSection({ projects, isLoading, sectionNumber }: ProjectsSectionProps) {
   const { ref, isInView } = useScrollReveal();
+  const number = sectionNumber ?? "03 // projects";
 
   if (isLoading) {
     return (
       <Wrapper>
-        <SectionHeading title="Projects" subtitle="Things I've built" number="03 // projects" />
+        <SectionHeading title="Projects" subtitle="Things I've built" number={number} />
         <EmptyState>
           <Spinner size={32} />
         </EmptyState>
@@ -160,7 +162,7 @@ export default function ProjectsSection({ projects, isLoading }: ProjectsSection
 
   return (
     <Wrapper id="projects">
-      <SectionHeading title="Projects" subtitle="Things I've built" number="03 // projects" />
+      <SectionHeading title="Projects" subtitle="Things I've built" number={number} />
       <motion.div
         ref={ref}
         initial={{ opacity: 0 }}
