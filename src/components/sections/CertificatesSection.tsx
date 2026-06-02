@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -192,18 +193,20 @@ const ViewAllRow = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxxl};
 `;
 
-const ViewAllLink = styled.a`
+const ShowMoreButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xxl}`};
   border: 1px solid rgba(167, 139, 250, 0.2);
   border-radius: ${({ theme }) => theme.radius.full};
+  background: transparent;
   color: ${({ theme }) => theme.colors.primary};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
+  cursor: pointer;
   transition: all 0.25s ease;
-  text-decoration: none;
+  font-family: inherit;
 
   &:hover {
     background: rgba(167, 139, 250, 0.08);
@@ -216,7 +219,7 @@ interface CertificatesSectionProps {
   certificates: Certificate[];
   isLoading: boolean;
   sectionNumber?: string;
-  maxItems?: number;
+  initialItems?: number;
   viewAllHref?: string;
 }
 
@@ -224,15 +227,20 @@ export default function CertificatesSection({
   certificates,
   isLoading,
   sectionNumber,
-  maxItems,
+  initialItems,
   viewAllHref,
 }: CertificatesSectionProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(initialItems ?? certificates.length);
   const { ref, isInView } = useScrollReveal();
   const number = sectionNumber ?? "04 // certs";
 
-  const displayed = maxItems ? certificates.slice(0, maxItems) : certificates;
-  const hasMore = maxItems && certificates.length > maxItems;
+  const displayed = certificates.slice(0, visibleCount);
+  const hasMore = visibleCount < certificates.length;
+
+  function showMore() {
+    setVisibleCount((prev) => Math.min(prev + (initialItems ?? 6), certificates.length));
+  }
 
   const selected = certificates.find((c) => c.id === selectedId);
 
@@ -302,11 +310,17 @@ export default function CertificatesSection({
               </motion.div>
             ))}
             </Grid>
-            {viewAllHref && (
+            {hasMore && (
               <ViewAllRow>
-                <ViewAllLink href={viewAllHref}>
-                  View All Certificates →
-                </ViewAllLink>
+                {viewAllHref ? (
+                  <ShowMoreButton as={Link} href={viewAllHref}>
+                    See More →
+                  </ShowMoreButton>
+                ) : (
+                  <ShowMoreButton onClick={showMore}>
+                    Show More ↓
+                  </ShowMoreButton>
+                )}
               </ViewAllRow>
             )}
           </>
