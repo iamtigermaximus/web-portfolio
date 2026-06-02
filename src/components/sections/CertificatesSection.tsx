@@ -11,7 +11,7 @@ import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import Spinner from "@/components/ui/Spinner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import { normalizeImageUrl, normalizePdfUrl } from "@/lib/utils";
+import { normalizeImageUrl, normalizePdfUrl, isPdf } from "@/lib/utils";
 
 interface Certificate {
   id: string;
@@ -61,15 +61,11 @@ const CertCard = styled.div`
   }
 `;
 
-function isPdf(url: string | null): boolean {
-  return !!url && /\.pdf(\?.*)?$/i.test(url);
-}
-
 const Thumbnail = styled.div<{ $url: string | null }>`
   width: 100%;
   height: 160px;
   background: ${({ $url, theme }) =>
-    $url && !isPdf($url)
+    $url
       ? `url(${$url}) center/cover no-repeat`
       : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
   display: flex;
@@ -233,7 +229,12 @@ export default function CertificatesSection({
               >
                 <CertCard onClick={() => setSelectedId(cert.id)}>
                   <Thumbnail $url={normalizeImageUrl(cert.imageUrl)}>
-                    {isPdf(cert.imageUrl) ? "📄" : !cert.imageUrl && "📜"}
+                    {(() => {
+                      const thumb = normalizeImageUrl(cert.imageUrl);
+                      if (thumb) return null; // image/thumbnail will show via CSS
+                      if (isPdf(cert.imageUrl)) return "📄";
+                      return "📜";
+                    })()}
                   </Thumbnail>
                   <CertInfo>
                     <CertName>{cert.courseName}</CertName>
