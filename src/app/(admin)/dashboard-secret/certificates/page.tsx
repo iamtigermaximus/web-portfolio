@@ -119,7 +119,7 @@ export default function AdminCertificatesPage() {
       courseName: cert.courseName,
       issuer: cert.issuer,
       issueDate: cert.issueDate
-        ? new Date(cert.issueDate).toISOString().split("T")[0]
+        ? new Date(cert.issueDate).toISOString().slice(0, 7)
         : "",
       credentialUrl: cert.credentialUrl || "",
       imageUrl: cert.imageUrl || "",
@@ -191,7 +191,7 @@ export default function AdminCertificatesPage() {
             />
             <Input
               label="Issue Date"
-              type="date"
+              type="month"
               error={form.formState.errors.issueDate?.message as string}
               {...form.register("issueDate")}
             />
