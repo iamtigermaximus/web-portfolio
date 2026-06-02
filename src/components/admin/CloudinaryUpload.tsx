@@ -153,7 +153,7 @@ export default function CloudinaryUpload({
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,application/pdf,.pdf"
           style={{ display: "none" }}
           onChange={handleFileChange}
         />

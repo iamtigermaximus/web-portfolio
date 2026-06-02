@@ -60,11 +60,15 @@ const CertCard = styled.div`
   }
 `;
 
+function isPdf(url: string | null): boolean {
+  return !!url && /\.pdf(\?.*)?$/i.test(url);
+}
+
 const Thumbnail = styled.div<{ $url: string | null }>`
   width: 100%;
   height: 160px;
   background: ${({ $url, theme }) =>
-    $url
+    $url && !isPdf($url)
       ? `url(${$url}) center/cover no-repeat`
       : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
   display: flex;
@@ -108,6 +112,14 @@ const CertIssuer = styled.p`
 const CertDate = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+const PdfFrame = styled.iframe`
+  width: 100%;
+  height: 400px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: ${({ theme }) => theme.radius.md};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 const ModalImage = styled.div<{ $url: string | null }>`
@@ -220,7 +232,7 @@ export default function CertificatesSection({
               >
                 <CertCard onClick={() => setSelectedId(cert.id)}>
                   <Thumbnail $url={cert.imageUrl}>
-                    {!cert.imageUrl && "📜"}
+                    {isPdf(cert.imageUrl) ? "📄" : !cert.imageUrl && "📜"}
                   </Thumbnail>
                   <CertInfo>
                     <CertName>{cert.courseName}</CertName>
@@ -243,7 +255,11 @@ export default function CertificatesSection({
       >
         {selected && (
           <>
-            <ModalImage $url={selected.imageUrl} />
+            {isPdf(selected.imageUrl) ? (
+              <PdfFrame src={selected.imageUrl!} title={selected.courseName} />
+            ) : (
+              <ModalImage $url={selected.imageUrl} />
+            )}
             <ModalIssuer>{selected.issuer}</ModalIssuer>
             <ModalDate>
               Issued {format(new Date(selected.issueDate), "MMMM yyyy")}
