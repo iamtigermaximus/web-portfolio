@@ -13,10 +13,10 @@
 export function normalizeImageUrl(url: string | null): string | null {
   if (!url) return null;
 
-  // Google Drive → direct image (works for PDFs too — renders first page)
+  // Google Drive → thumbnail API (works for images AND PDFs — renders first page)
   const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (driveMatch) {
-    return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+    return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w640`;
   }
 
   // Cloudinary PDF → first-page thumbnail via pg_1 transformation

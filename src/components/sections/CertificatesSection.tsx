@@ -61,18 +61,16 @@ const CertCard = styled.div`
   }
 `;
 
-const Thumbnail = styled.div<{ $url: string | null }>`
+const Thumbnail = styled.div`
   width: 100%;
   height: 160px;
-  background: ${({ $url, theme }) =>
-    $url
-      ? `url(${$url}) center/cover no-repeat`
-      : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
   position: relative;
+  overflow: hidden;
 
   &::after {
     content: "";
@@ -83,7 +81,17 @@ const Thumbnail = styled.div<{ $url: string | null }>`
     height: 60px;
     background: linear-gradient(to top, rgba(6, 11, 20, 0.6), transparent);
     pointer-events: none;
+    z-index: 1;
   }
+`;
+
+const ThumbImg = styled.img`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
 `;
 
 const CertInfo = styled.div`
@@ -188,6 +196,10 @@ export default function CertificatesSection({
 
   const selected = certificates.find((c) => c.id === selectedId);
 
+  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.style.display = "none";
+  };
+
   if (isLoading) {
     return (
       <Wrapper>
@@ -228,13 +240,15 @@ export default function CertificatesSection({
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
                 <CertCard onClick={() => setSelectedId(cert.id)}>
-                  <Thumbnail $url={normalizeImageUrl(cert.imageUrl)}>
-                    {(() => {
-                      const thumb = normalizeImageUrl(cert.imageUrl);
-                      if (thumb) return null; // image/thumbnail will show via CSS
-                      if (isPdf(cert.imageUrl)) return "📄";
-                      return "📜";
-                    })()}
+                  <Thumbnail>
+                    {isPdf(cert.imageUrl) ? "📄" : "📜"}
+                    {normalizeImageUrl(cert.imageUrl) && (
+                      <ThumbImg
+                        src={normalizeImageUrl(cert.imageUrl)!}
+                        alt={cert.courseName}
+                        onError={handleImgError}
+                      />
+                    )}
                   </Thumbnail>
                   <CertInfo>
                     <CertName>{cert.courseName}</CertName>
