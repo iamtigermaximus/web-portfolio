@@ -31,20 +31,23 @@ const Form = styled.form`
 
 const TextArea = styled.textarea`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: ${({ theme }) => theme.radius.sm};
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.base};
   font-family: inherit;
   min-height: 140px;
   resize: vertical;
-  transition: border-color 0.2s;
+  transition: all 0.25s ease;
   width: 100%;
+  backdrop-filter: blur(8px);
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.glow};
+    background: rgba(255, 255, 255, 0.05);
   }
 
   &::placeholder {
@@ -84,9 +87,10 @@ export default function ContactSection() {
 
       toast.success("Message sent! I'll get back to you soon.", {
         style: {
-          background: "#1e293b",
-          color: "#f8fafc",
-          border: "1px solid rgba(255,255,255,0.1)",
+          background: "#0c1225",
+          color: "#f1f5f9",
+          border: "1px solid rgba(167, 139, 250, 0.2)",
+          borderRadius: "12px",
         },
       });
       reset();
@@ -95,9 +99,10 @@ export default function ContactSection() {
         err instanceof Error ? err.message : "Failed to send message",
         {
           style: {
-            background: "#1e293b",
-            color: "#f8fafc",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "#0c1225",
+            color: "#f1f5f9",
+            border: "1px solid rgba(248, 113, 113, 0.2)",
+            borderRadius: "12px",
           },
         }
       );
@@ -110,6 +115,7 @@ export default function ContactSection() {
         title="Get In Touch"
         subtitle="Have a question or want to work together? Send me a message."
         align="center"
+        number="05 // contact"
       />
       <motion.div
         ref={ref}

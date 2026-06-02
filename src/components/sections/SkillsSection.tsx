@@ -52,21 +52,25 @@ const Tabs = styled.div`
 `;
 
 const Tab = styled.button<{ $active: boolean }>`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.xl}`};
   border-radius: ${({ theme }) => theme.radius.full};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.primary : "rgba(255, 255, 255, 0.05)"};
-  color: ${({ $active, theme }) =>
-    $active ? "white" : theme.colors.textSecondary};
+    $active
+      ? `linear-gradient(135deg, ${theme.colors.primaryLight}, ${theme.colors.primary})`
+      : "rgba(255, 255, 255, 0.03)"};
+  color: ${({ $active }) => ($active ? "white" : "#94a3b8")};
   border: 1px solid
     ${({ $active, theme }) =>
-      $active ? theme.colors.primary : theme.colors.cardBorder};
-  transition: all 0.2s;
+      $active ? theme.colors.primary : "rgba(255, 255, 255, 0.06)"};
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: ${({ $active, theme }) =>
+      $active ? "" : `0 0 15px ${theme.colors.glow}`};
   }
 `;
 
@@ -74,10 +78,6 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
-`;
-
-const SkillCard = styled(GlassCard)`
-  padding: ${({ theme }) => theme.spacing.xl};
 `;
 
 const SkillHeader = styled.div`
@@ -88,10 +88,11 @@ const SkillHeader = styled.div`
 `;
 
 const SkillIcon = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(129, 140, 248, 0.15);
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.15);
   color: ${({ theme }) => theme.colors.primary};
   display: flex;
   align-items: center;
@@ -107,6 +108,7 @@ const SkillLevel = styled.span`
   margin-left: auto;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.textMuted};
+  font-family: 'JetBrains Mono', monospace;
 `;
 
 const EmptyState = styled.div`
@@ -140,7 +142,7 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
   if (isLoading) {
     return (
       <Wrapper>
-        <SectionHeading title="Skills" subtitle="Technologies I work with" />
+        <SectionHeading title="Skills" subtitle="Technologies I work with" number="02 // skills" />
         <EmptyState>
           <Spinner size={32} />
         </EmptyState>
@@ -150,7 +152,7 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
 
   return (
     <Wrapper id="skills">
-      <SectionHeading title="Skills" subtitle="Technologies I work with" />
+      <SectionHeading title="Skills" subtitle="Technologies I work with" number="02 // skills" />
       <Tabs>
         {categories.map((cat) => (
           <Tab
@@ -175,15 +177,11 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
                     key={skill.id}
                     layout
                     initial={{ opacity: 0, scale: 0.95 }}
-                    animate={
-                      isInView
-                        ? { opacity: 1, scale: 1 }
-                        : {}
-                    }
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.3, delay: i * 0.05 }}
                   >
-                    <SkillCard hover>
+                    <GlassCard hover>
                       <SkillHeader>
                         <SkillIcon>
                           <IconComponent size={20} weight="bold" />
@@ -191,11 +189,8 @@ export default function SkillsSection({ skills, isLoading }: SkillsSectionProps)
                         <SkillName>{skill.name}</SkillName>
                         <SkillLevel>{skill.proficiencyLevel}%</SkillLevel>
                       </SkillHeader>
-                      <ProficiencyBar
-                        level={skill.proficiencyLevel}
-                        animated={isInView}
-                      />
-                    </SkillCard>
+                      <ProficiencyBar level={skill.proficiencyLevel} animated={isInView} />
+                    </GlassCard>
                   </motion.div>
                 );
               })}

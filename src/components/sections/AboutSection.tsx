@@ -42,9 +42,12 @@ const AvatarWrapper = styled.div`
   width: 180px;
   height: 180px;
   border-radius: ${({ theme }) => theme.radius.full};
-  border: 2px solid ${({ theme }) => theme.colors.cardBorder};
+  border: 2px solid rgba(167, 139, 250, 0.25);
   overflow: hidden;
   position: relative;
+  box-shadow:
+    0 0 30px rgba(167, 139, 250, 0.15),
+    0 0 60px rgba(45, 212, 191, 0.06);
 
   img {
     object-fit: cover;
@@ -60,6 +63,7 @@ const Bio = styled.div`
 const BioText = styled.p`
   font-size: ${({ theme }) => theme.fontSize.lg};
   line-height: 1.8;
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 const SocialLinks = styled.div`
@@ -74,15 +78,17 @@ const SocialLink = styled.a`
   width: 44px;
   height: 44px;
   border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: ${({ theme }) => theme.colors.textSecondary};
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
 
   &:hover {
-    background: rgba(129, 140, 248, 0.15);
-    border-color: ${({ theme }) => theme.colors.primary};
+    background: rgba(167, 139, 250, 0.12);
+    border-color: rgba(167, 139, 250, 0.3);
     color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.15);
   }
 `;
 
@@ -95,6 +101,7 @@ export default function AboutSection() {
         title="About Me"
         subtitle="A bit about my journey and what drives me"
         align="left"
+        number="01 // about"
       />
       <motion.div
         ref={ref}

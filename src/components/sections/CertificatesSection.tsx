@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { ArrowSquareOut, X } from "@phosphor-icons/react";
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import GlassCard from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
@@ -38,10 +38,26 @@ const Grid = styled.div`
   gap: ${({ theme }) => theme.spacing.xl};
 `;
 
-const CertCard = styled(GlassCard)`
-  padding: 0;
+const CertCard = styled.div`
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.025) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: ${({ theme }) => theme.radius.lg};
   overflow: hidden;
   cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+
+  &:hover {
+    border-color: rgba(45, 212, 191, 0.2);
+    transform: translateY(-3px);
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      0 0 25px rgba(45, 212, 191, 0.06);
+  }
 `;
 
 const Thumbnail = styled.div<{ $url: string | null }>`
@@ -50,11 +66,23 @@ const Thumbnail = styled.div<{ $url: string | null }>`
   background: ${({ $url, theme }) =>
     $url
       ? `url(${$url}) center/cover no-repeat`
-      : `linear-gradient(135deg, ${theme.colors.primary}33, ${theme.colors.accent}22)`};
+      : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to top, rgba(6, 11, 20, 0.6), transparent);
+    pointer-events: none;
+  }
 `;
 
 const CertInfo = styled.div`
@@ -66,11 +94,15 @@ const CertInfo = styled.div`
 
 const CertName = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.base};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
 `;
 
 const CertIssuer = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.accent};
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
 `;
 
 const CertDate = styled.p`
@@ -86,12 +118,14 @@ const ModalImage = styled.div<{ $url: string | null }>`
   background: ${({ $url, theme }) =>
     $url
       ? `url(${$url}) center/cover no-repeat`
-      : `linear-gradient(135deg, ${theme.colors.primary}33, ${theme.colors.accent}22)`};
+      : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
 `;
 
 const ModalIssuer = styled.p`
   font-size: ${({ theme }) => theme.fontSize.lg};
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.accent};
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
@@ -115,9 +149,10 @@ const CredentialLink = styled.a`
   color: ${({ theme }) => theme.colors.primary};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-size: ${({ theme }) => theme.fontSize.sm};
+  transition: color 0.2s;
 
   &:hover {
-    text-decoration: underline;
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
@@ -147,6 +182,7 @@ export default function CertificatesSection({
         <SectionHeading
           title="Certificates"
           subtitle="Professional certifications and courses"
+          number="04 // certs"
         />
         <EmptyState>
           <Spinner size={32} />
@@ -160,6 +196,7 @@ export default function CertificatesSection({
       <SectionHeading
         title="Certificates"
         subtitle="Professional certifications and courses"
+        number="04 // certs"
       />
       <motion.div
         ref={ref}
@@ -178,7 +215,7 @@ export default function CertificatesSection({
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
-                <CertCard hover onClick={() => setSelectedId(cert.id)}>
+                <CertCard onClick={() => setSelectedId(cert.id)}>
                   <Thumbnail $url={cert.imageUrl}>
                     {!cert.imageUrl && "📜"}
                   </Thumbnail>

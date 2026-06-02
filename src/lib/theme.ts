@@ -15,6 +15,8 @@ export interface ThemeType {
     textMuted: string;
     success: string;
     error: string;
+    glow: string;
+    glowAccent: string;
   };
   radius: {
     sm: string;
@@ -55,31 +57,39 @@ export interface ThemeType {
     lg: string;
     xl: string;
   };
+  shadow: {
+    glow: string;
+    glowStrong: string;
+    accentGlow: string;
+    card: string;
+  };
 }
 
 export const darkTheme: ThemeType = {
   name: "dark",
   colors: {
-    bg: "#0f172a",
-    surface: "#1e293b",
-    card: "rgba(255, 255, 255, 0.03)",
-    cardHover: "rgba(255, 255, 255, 0.06)",
-    cardBorder: "rgba(255, 255, 255, 0.06)",
-    primary: "#818cf8",
-    primaryHover: "#6366f1",
-    primaryLight: "#a5b4fc",
-    accent: "#22d3ee",
-    textPrimary: "#f8fafc",
+    bg: "#060b14",
+    surface: "#0c1225",
+    card: "rgba(255, 255, 255, 0.02)",
+    cardHover: "rgba(255, 255, 255, 0.05)",
+    cardBorder: "rgba(255, 255, 255, 0.08)",
+    primary: "#a78bfa",
+    primaryHover: "#c4b5fd",
+    primaryLight: "#8b5cf6",
+    accent: "#2dd4bf",
+    textPrimary: "#f1f5f9",
     textSecondary: "#94a3b8",
-    textMuted: "#64748b",
+    textMuted: "#475569",
     success: "#34d399",
     error: "#f87171",
+    glow: "rgba(167, 139, 250, 0.25)",
+    glowAccent: "rgba(45, 212, 191, 0.2)",
   },
   radius: {
-    sm: "8px",
-    md: "12px",
-    lg: "16px",
-    xl: "24px",
+    sm: "10px",
+    md: "14px",
+    lg: "20px",
+    xl: "28px",
     full: "9999px",
   },
   spacing: {
@@ -93,7 +103,7 @@ export const darkTheme: ThemeType = {
   },
   fontSize: {
     xs: "0.75rem",
-    sm: "0.875rem",
+    sm: "0.8125rem",
     md: "0.9375rem",
     base: "1rem",
     lg: "1.125rem",
@@ -113,5 +123,11 @@ export const darkTheme: ThemeType = {
     md: "768px",
     lg: "1024px",
     xl: "1280px",
+  },
+  shadow: {
+    glow: "0 0 30px rgba(167, 139, 250, 0.15)",
+    glowStrong: "0 0 50px rgba(167, 139, 250, 0.25)",
+    accentGlow: "0 0 30px rgba(45, 212, 191, 0.12)",
+    card: "0 4px 30px rgba(0, 0, 0, 0.4)",
   },
 };

@@ -22,20 +22,26 @@ const Label = styled.label`
 
 const StyledInput = styled.input<{ $hasError: boolean }>`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.colors.surface};
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid
     ${({ $hasError, theme }) =>
-      $hasError ? theme.colors.error : theme.colors.cardBorder};
+      $hasError ? theme.colors.error : "rgba(255, 255, 255, 0.08)"};
   border-radius: ${({ theme }) => theme.radius.sm};
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.base};
-  transition: border-color 0.2s;
+  transition: all 0.25s ease;
   width: 100%;
+  backdrop-filter: blur(8px);
 
   &:focus {
     outline: none;
     border-color: ${({ $hasError, theme }) =>
       $hasError ? theme.colors.error : theme.colors.primary};
+    box-shadow: ${({ $hasError, theme }) =>
+      $hasError
+        ? `0 0 0 3px rgba(248, 113, 113, 0.15)`
+        : `0 0 0 3px ${theme.colors.glow}`};
+    background: rgba(255, 255, 255, 0.05);
   }
 
   &::placeholder {

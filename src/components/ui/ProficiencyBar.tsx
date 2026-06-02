@@ -10,22 +10,44 @@ interface ProficiencyBarProps {
 
 const BarWrapper = styled.div`
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 3px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
   overflow: hidden;
+  position: relative;
 `;
 
 const Fill = styled.div<{ $level: number; $animate: boolean }>`
   height: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   background: linear-gradient(
     90deg,
+    ${({ theme }) => theme.colors.primaryLight},
     ${({ theme }) => theme.colors.primary},
     ${({ theme }) => theme.colors.accent}
   );
-  width: ${({ $level, $animate }) => ($animate ? "0" : `${$level}%`)};
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  background-size: 200% 100%;
+  width: ${({ $level }) => $level}%;
+  transition: width 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  position: relative;
+  box-shadow:
+    0 0 12px rgba(167, 139, 250, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    border-radius: 4px 4px 0 0;
+  }
 `;
 
 export default function ProficiencyBar({
@@ -41,11 +63,11 @@ export default function ProficiencyBar({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setTimeout(() => setIsVisible(true), 100);
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.3 }
     );
 
     if (ref.current) observer.observe(ref.current);

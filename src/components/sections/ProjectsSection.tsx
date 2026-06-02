@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
 import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
@@ -43,6 +43,7 @@ const ProjectImage = styled.div<{ $url: string | null }>`
   border-radius: ${({ theme }) => theme.radius.md};
   overflow: hidden;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
+  position: relative;
 
   ${({ $url }) =>
     $url
@@ -52,14 +53,27 @@ const ProjectImage = styled.div<{ $url: string | null }>`
       : css`
           background: linear-gradient(
             135deg,
-            rgba(129, 140, 248, 0.2),
-            rgba(34, 211, 238, 0.1)
+            rgba(167, 139, 250, 0.15),
+            rgba(45, 212, 191, 0.08)
           );
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 2rem;
+          font-size: 2.5rem;
+          border: 1px solid rgba(255, 255, 255, 0.04);
         `}
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(6, 11, 20, 0.4) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
 `;
 
 const ProjectContent = styled.div`
@@ -71,10 +85,12 @@ const ProjectContent = styled.div`
 
 const ProjectTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.xl};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
 `;
 
 const ProjectDescription = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
+  line-height: 1.7;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -92,6 +108,7 @@ const Links = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: auto;
   padding-top: ${({ theme }) => theme.spacing.md};
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 `;
 
 const ProjectLink = styled.a`
@@ -101,15 +118,17 @@ const ProjectLink = styled.a`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.textSecondary};
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
   border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s ease;
 
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: rgba(167, 139, 250, 0.3);
+    background: rgba(167, 139, 250, 0.08);
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.08);
   }
 `;
 
@@ -125,16 +144,13 @@ interface ProjectsSectionProps {
   isLoading: boolean;
 }
 
-export default function ProjectsSection({
-  projects,
-  isLoading,
-}: ProjectsSectionProps) {
+export default function ProjectsSection({ projects, isLoading }: ProjectsSectionProps) {
   const { ref, isInView } = useScrollReveal();
 
   if (isLoading) {
     return (
       <Wrapper>
-        <SectionHeading title="Projects" subtitle="Things I've built" />
+        <SectionHeading title="Projects" subtitle="Things I've built" number="03 // projects" />
         <EmptyState>
           <Spinner size={32} />
         </EmptyState>
@@ -144,7 +160,7 @@ export default function ProjectsSection({
 
   return (
     <Wrapper id="projects">
-      <SectionHeading title="Projects" subtitle="Things I've built" />
+      <SectionHeading title="Projects" subtitle="Things I've built" number="03 // projects" />
       <motion.div
         ref={ref}
         initial={{ opacity: 0 }}
@@ -176,28 +192,30 @@ export default function ProjectsSection({
                         </Badge>
                       ))}
                     </Tags>
-                    <Links>
-                      {project.liveUrl && (
-                        <ProjectLink
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <ArrowSquareOut size={16} weight="bold" />
-                          Live
-                        </ProjectLink>
-                      )}
-                      {project.githubUrl && (
-                        <ProjectLink
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <GithubLogo size={16} weight="bold" />
-                          Code
-                        </ProjectLink>
-                      )}
-                    </Links>
+                    {(project.liveUrl || project.githubUrl) && (
+                      <Links>
+                        {project.liveUrl && (
+                          <ProjectLink
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ArrowSquareOut size={16} weight="bold" />
+                            Live
+                          </ProjectLink>
+                        )}
+                        {project.githubUrl && (
+                          <ProjectLink
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <GithubLogo size={16} weight="bold" />
+                            Code
+                          </ProjectLink>
+                        )}
+                      </Links>
+                    )}
                   </ProjectContent>
                 </GlassCard>
               </motion.div>

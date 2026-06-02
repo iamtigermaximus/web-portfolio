@@ -30,25 +30,39 @@ const sizeStyles: Record<ButtonSize, ReturnType<typeof css>> = {
 
 const variantStyles: Record<ButtonVariant, ReturnType<typeof css>> = {
   primary: css`
-    background: ${({ theme }) => theme.colors.primary};
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.colors.primaryLight},
+      ${({ theme }) => theme.colors.primary}
+    );
     color: white;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+
     &:hover:not(:disabled) {
-      background: ${({ theme }) => theme.colors.primaryHover};
+      box-shadow:
+        0 6px 30px rgba(139, 92, 246, 0.5),
+        0 0 40px rgba(167, 139, 250, 0.15);
+      transform: translateY(-1px);
     }
   `,
   secondary: css`
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     color: ${({ theme }) => theme.colors.textPrimary};
     border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(167, 139, 250, 0.25);
+      box-shadow: 0 0 20px rgba(167, 139, 250, 0.08);
     }
   `,
   ghost: css`
     background: transparent;
     color: ${({ theme }) => theme.colors.textSecondary};
+
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       color: ${({ theme }) => theme.colors.textPrimary};
     }
   `,
@@ -64,18 +78,19 @@ const StyledButton = styled.button<{
   gap: ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.radius.sm};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  letter-spacing: 0.01em;
 
   ${({ $size }) => sizeStyles[$size]}
   ${({ $variant }) => variantStyles[$variant]}
 
   &:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
   }
 `;
