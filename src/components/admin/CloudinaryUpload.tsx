@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Image, Spinner } from "@phosphor-icons/react";
+import { normalizeImageUrl } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 
 interface CloudinaryUploadProps {
@@ -130,7 +131,7 @@ export default function CloudinaryUpload({
   function handleUrlApply() {
     const trimmed = urlText.trim();
     if (!trimmed) return;
-    onUpload(trimmed);
+    onUpload(normalizeImageUrl(trimmed) ?? trimmed);
   }
 
   return (

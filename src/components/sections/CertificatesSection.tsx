@@ -11,6 +11,7 @@ import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import Spinner from "@/components/ui/Spinner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { normalizeImageUrl, normalizePdfUrl } from "@/lib/utils";
 
 interface Certificate {
   id: string;
@@ -231,7 +232,7 @@ export default function CertificatesSection({
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
                 <CertCard onClick={() => setSelectedId(cert.id)}>
-                  <Thumbnail $url={cert.imageUrl}>
+                  <Thumbnail $url={normalizeImageUrl(cert.imageUrl)}>
                     {isPdf(cert.imageUrl) ? "📄" : !cert.imageUrl && "📜"}
                   </Thumbnail>
                   <CertInfo>
@@ -256,9 +257,9 @@ export default function CertificatesSection({
         {selected && (
           <>
             {isPdf(selected.imageUrl) ? (
-              <PdfFrame src={selected.imageUrl!} title={selected.courseName} />
+              <PdfFrame src={normalizePdfUrl(selected.imageUrl)!} title={selected.courseName} />
             ) : (
-              <ModalImage $url={selected.imageUrl} />
+              <ModalImage $url={normalizeImageUrl(selected.imageUrl)} />
             )}
             <ModalIssuer>{selected.issuer}</ModalIssuer>
             <ModalDate>

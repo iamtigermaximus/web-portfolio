@@ -9,6 +9,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import Spinner from "@/components/ui/Spinner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { normalizeImageUrl } from "@/lib/utils";
 
 interface Project {
   id: string;
@@ -181,7 +182,7 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber }: 
                 transition={{ duration: 0.4, delay: i * 0.1 }}
               >
                 <GlassCard hover>
-                  <ProjectImage $url={project.imageUrl}>
+                  <ProjectImage $url={normalizeImageUrl(project.imageUrl)}>
                     {!project.imageUrl && "🚀"}
                   </ProjectImage>
                   <ProjectContent>
