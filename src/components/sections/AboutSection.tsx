@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
@@ -37,21 +38,17 @@ const AvatarColumn = styled.div`
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
-const Avatar = styled.div`
+const AvatarWrapper = styled.div`
   width: 180px;
   height: 180px;
   border-radius: ${({ theme }) => theme.radius.full};
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.primary}33,
-    ${({ theme }) => theme.colors.accent}33
-  );
   border: 2px solid ${({ theme }) => theme.colors.cardBorder};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: ${({ theme }) => theme.colors.primary};
+  overflow: hidden;
+  position: relative;
+
+  img {
+    object-fit: cover;
+  }
 `;
 
 const Bio = styled.div`
@@ -108,10 +105,17 @@ export default function AboutSection() {
         <GlassCard>
           <Content>
             <AvatarColumn>
-              <Avatar>YN</Avatar>
+              <AvatarWrapper>
+                <Image
+                  src="/LINKEDIN_IMAGE.jpeg"
+                  alt="Siegfred Gamboa"
+                  fill
+                  sizes="180px"
+                />
+              </AvatarWrapper>
               <SocialLinks>
                 <SocialLink
-                  href="https://github.com"
+                  href="https://github.com/iamtigermaximus"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
@@ -130,17 +134,26 @@ export default function AboutSection() {
             </AvatarColumn>
             <Bio>
               <BioText>
-                I&apos;m a passionate full stack developer with a love for building
-                beautiful, performant web applications. With experience across the
-                entire stack — from crafting pixel-perfect UIs to designing scalable
-                backend architectures — I thrive on turning complex problems into
-                elegant solutions.
+                I&apos;m a full stack developer who thrives at the intersection of
+                craftsmanship and curiosity — building performant, polished web
+                experiences from the database all the way to the last pixel.
+                What drives me is the pursuit of elegant solutions: the kind where
+                complexity disappears behind a smooth, intuitive interface.
               </BioText>
               <BioText>
-                When I&apos;m not coding, you&apos;ll find me exploring new technologies,
-                contributing to open source projects, or sharing knowledge through
-                technical blog posts. I believe in continuous learning and the power
-                of building things that make a difference.
+                Lately, I&apos;ve been diving deep into artificial intelligence —
+                exploring how large language models reason, how agents collaborate,
+                and how AI-native tooling is reshaping the way we build software.
+                This isn&apos;t just a passing interest; it&apos;s the direction I&apos;m
+                steering my career toward. I spend my time experimenting with
+                AI-powered workflows, studying prompt engineering, and learning
+                how to bridge the gap between human intent and machine capability.
+              </BioText>
+              <BioText>
+                Outside the editor, I&apos;m a perpetual learner — always chasing that
+                next concept that reshapes how I see the stack. I believe the best
+                engineers aren&apos;t just tool-users; they&apos;re tool-builders who
+                understand the principles underneath.
               </BioText>
             </Bio>
           </Content>

@@ -144,7 +144,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
         >
-          Your Name
+          Siegfred Gamboa
         </Name>
 
         <RoleWrapper>
