@@ -8,10 +8,10 @@ import { List, X } from "@phosphor-icons/react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/skills", label: "Skills" },
   { href: "/projects", label: "Projects" },
   { href: "/certificates", label: "Certificates" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -23,9 +23,7 @@ const Header = styled.header<{ $scrolled: boolean }>`
   z-index: 100;
   padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.xxl}`};
   background: ${({ $scrolled }) =>
-    $scrolled
-      ? "rgba(6, 11, 20, 0.8)"
-      : "transparent"};
+    $scrolled ? "rgba(6, 11, 20, 0.8)" : "transparent"};
   backdrop-filter: ${({ $scrolled }) =>
     $scrolled ? "blur(24px) saturate(180%)" : "none"};
   -webkit-backdrop-filter: ${({ $scrolled }) =>
@@ -49,7 +47,7 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled(Link)`
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   letter-spacing: 0.06em;
@@ -195,7 +193,7 @@ const DrawerDivider = styled.div`
 `;
 
 const DrawerNumber = styled.span`
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.textMuted};
   margin-right: ${({ theme }) => theme.spacing.sm};
