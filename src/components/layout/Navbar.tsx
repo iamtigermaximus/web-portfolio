@@ -8,11 +8,11 @@ import { List, X } from "@phosphor-icons/react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Skills" },
-  { href: "/projects", label: "Projects" },
-  { href: "/certificates", label: "Certificates" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#certificates", label: "Certificates" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 const Header = styled.header<{ $scrolled: boolean }>`
@@ -21,16 +21,20 @@ const Header = styled.header<{ $scrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 100;
-  padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xxl};
+  padding: ${({ theme }) => theme.spacing.lg}
+    ${({ theme }) => theme.spacing.xxl};
   background: ${({ $scrolled }) =>
     $scrolled ? "rgba(15, 23, 42, 0.85)" : "transparent"};
   backdrop-filter: ${({ $scrolled }) => ($scrolled ? "blur(20px)" : "none")};
   border-bottom: ${({ $scrolled, theme }) =>
-    $scrolled ? `1px solid ${theme.colors.cardBorder}` : "1px solid transparent"};
+    $scrolled
+      ? `1px solid ${theme.colors.cardBorder}`
+      : "1px solid transparent"};
   transition: all 0.3s ease;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+    padding: ${({ theme }) => theme.spacing.md}
+      ${({ theme }) => theme.spacing.lg};
   }
 `;
 
@@ -153,8 +157,16 @@ const MobileLink = styled(Link)<{ $active: boolean }>`
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [hash, setHash] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setHash(window.location.hash);
+    const onHashChange = () => setHash(window.location.hash);
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -164,19 +176,24 @@ export default function Navbar() {
 
   useEffect(() => {
     setMobileOpen(false);
-  }, [pathname]);
+  }, [pathname, hash]);
+
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/" && !hash;
+    return pathname + hash === href;
+  }
 
   return (
     <>
       <Header $scrolled={scrolled}>
         <Nav>
-          <Logo href="/">Portfolio</Logo>
+          <Logo href="/">SIEGFRED GAMBOA</Logo>
           <DesktopLinks>
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}
                 href={link.href}
-                $active={pathname === link.href}
+                $active={isActive(link.href)}
               >
                 {link.label}
               </NavLink>
@@ -199,7 +216,7 @@ export default function Navbar() {
           <MobileLink
             key={link.href}
             href={link.href}
-            $active={pathname === link.href}
+            $active={isActive(link.href)}
           >
             {link.label}
           </MobileLink>
