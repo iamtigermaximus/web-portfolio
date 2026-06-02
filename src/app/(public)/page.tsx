@@ -11,7 +11,7 @@ export default async function HomePage() {
   const [projects, skills, certificates] = await Promise.all([
     prisma.project.findMany({ orderBy: { order: "asc" } }),
     prisma.skill.findMany({ orderBy: { order: "asc" } }),
-    prisma.certificate.findMany({ orderBy: { issueDate: "desc" } }),
+    prisma.certificate.findMany({ orderBy: { issueDate: "desc" }, take: 3 }),
   ]);
 
   return (
@@ -19,7 +19,7 @@ export default async function HomePage() {
       <HeroSection />
       <ProjectsSection projects={JSON.parse(JSON.stringify(projects))} isLoading={false} sectionNumber="01 // projects" />
       <SkillsSection skills={JSON.parse(JSON.stringify(skills))} isLoading={false} sectionNumber="02 // skills" />
-      <CertificatesSection certificates={JSON.parse(JSON.stringify(certificates))} isLoading={false} sectionNumber="03 // certs" />
+      <CertificatesSection certificates={JSON.parse(JSON.stringify(certificates))} isLoading={false} sectionNumber="03 // certs" maxItems={3} viewAllHref="/certificates" />
     </>
   );
 }

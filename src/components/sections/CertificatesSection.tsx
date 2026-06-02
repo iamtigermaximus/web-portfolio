@@ -187,20 +187,52 @@ const EmptyState = styled.div`
   color: ${({ theme }) => theme.colors.textMuted};
 `;
 
+const ViewAllRow = styled.div`
+  text-align: center;
+  margin-top: ${({ theme }) => theme.spacing.xxxl};
+`;
+
+const ViewAllLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xxl}`};
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: ${({ theme }) => theme.radius.full};
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  transition: all 0.25s ease;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(167, 139, 250, 0.08);
+    border-color: rgba(167, 139, 250, 0.4);
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+  }
+`;
+
 interface CertificatesSectionProps {
   certificates: Certificate[];
   isLoading: boolean;
   sectionNumber?: string;
+  maxItems?: number;
+  viewAllHref?: string;
 }
 
 export default function CertificatesSection({
   certificates,
   isLoading,
   sectionNumber,
+  maxItems,
+  viewAllHref,
 }: CertificatesSectionProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { ref, isInView } = useScrollReveal();
   const number = sectionNumber ?? "04 // certs";
+
+  const displayed = maxItems ? certificates.slice(0, maxItems) : certificates;
+  const hasMore = maxItems && certificates.length > maxItems;
 
   const selected = certificates.find((c) => c.id === selectedId);
 
@@ -239,8 +271,9 @@ export default function CertificatesSection({
         {certificates.length === 0 ? (
           <EmptyState>No certificates added yet.</EmptyState>
         ) : (
-          <Grid>
-            {certificates.map((cert, i) => (
+          <>
+            <Grid>
+              {displayed.map((cert, i) => (
               <motion.div
                 key={cert.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -268,7 +301,15 @@ export default function CertificatesSection({
                 </CertCard>
               </motion.div>
             ))}
-          </Grid>
+            </Grid>
+            {viewAllHref && (
+              <ViewAllRow>
+                <ViewAllLink href={viewAllHref}>
+                  View All Certificates →
+                </ViewAllLink>
+              </ViewAllRow>
+            )}
+          </>
         )}
       </motion.div>
 
