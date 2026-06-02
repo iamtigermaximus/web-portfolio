@@ -14,6 +14,7 @@ import Modal from "@/components/ui/Modal";
 import DataTable, { Column } from "@/components/admin/DataTable";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
 import CloudinaryUpload from "@/components/admin/CloudinaryUpload";
+import TagInput from "@/components/admin/TagInput";
 import { certificateSchema, CertificateFormValues } from "@/lib/validations";
 
 interface Certificate {
@@ -207,8 +208,13 @@ export default function AdminCertificatesPage() {
               <input type="hidden" {...form.register("imageUrl")} />
             </div>
             <div>
-              <input type="hidden" {...form.register("skillsLearned")} />
-              <input type="hidden" {...form.register("credentialUrl")} />
+              <TagInput
+                label="Skills Learned"
+                value={form.watch("skillsLearned") ?? []}
+                onChange={(tags) => form.setValue("skillsLearned", tags)}
+                placeholder="React, TypeScript, Node.js…"
+                error={form.formState.errors.skillsLearned?.message as string}
+              />
             </div>
           </FormGrid>
           <FormActions>

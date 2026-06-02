@@ -14,6 +14,7 @@ import Badge from "@/components/ui/Badge";
 import DataTable, { Column } from "@/components/admin/DataTable";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
 import CloudinaryUpload from "@/components/admin/CloudinaryUpload";
+import TagInput from "@/components/admin/TagInput";
 import { projectSchema, ProjectFormValues } from "@/lib/validations";
 
 interface Project {
@@ -256,15 +257,20 @@ export default function AdminProjectsPage() {
                 {...form.register("order", { valueAsNumber: true })}
               />
             </div>
+            <FullWidth>
+              <TagInput
+                label="Tech Stack"
+                value={form.watch("techStack") ?? []}
+                onChange={(tags) => form.setValue("techStack", tags)}
+                placeholder="React, TypeScript, Node.js…"
+                error={form.formState.errors.techStack?.message}
+              />
+            </FullWidth>
             <div>
               <CheckboxLabel>
                 <input type="checkbox" {...form.register("featured")} />
                 Featured
               </CheckboxLabel>
-              <input
-                type="hidden"
-                {...form.register("techStack")}
-              />
             </div>
           </FormGrid>
           <div style={{ marginTop: 24, display: "flex", gap: 12, justifyContent: "flex-end" }}>
