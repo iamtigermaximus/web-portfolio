@@ -51,6 +51,9 @@ const CertCard = styled.div`
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:hover {
     border-color: rgba(45, 212, 191, 0.2);
@@ -99,11 +102,16 @@ const CertInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm};
+  flex: 1;
 `;
 
 const CertName = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.base};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const CertIssuer = styled.p`
