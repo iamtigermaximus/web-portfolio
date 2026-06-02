@@ -3,11 +3,9 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import HeroSection from "@/components/sections/HeroSection";
-import AboutSection from "@/components/sections/AboutSection";
-import SkillsSection from "@/components/sections/SkillsSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
+import SkillsSection from "@/components/sections/SkillsSection";
 import CertificatesSection from "@/components/sections/CertificatesSection";
-import ContactSection from "@/components/sections/ContactSection";
 
 async function fetchSkills() {
   const res = await fetch("/api/public/skills");
@@ -46,11 +44,9 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <SkillsSection skills={skills} isLoading={skillsLoading} />
       <ProjectsSection projects={projects} isLoading={projectsLoading} />
+      <SkillsSection skills={skills} isLoading={skillsLoading} />
       <CertificatesSection certificates={certificates} isLoading={certsLoading} />
-      <ContactSection />
     </>
   );
 }
