@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   },
   description:
     "Full stack developer portfolio showcasing projects, skills, and experience in web development.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Portfolio — Full Stack Developer",
     description:
