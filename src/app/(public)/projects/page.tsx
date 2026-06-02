@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProjectsSection from "@/components/sections/ProjectsSection";
 
@@ -22,10 +22,17 @@ async function fetchProjects(): Promise<Project[]> {
 }
 
 export default function ProjectsPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ["public-projects"],
     queryFn: fetchProjects,
+    enabled: mounted,
   });
 
-  return <ProjectsSection projects={projects} isLoading={isLoading} />;
+  return <ProjectsSection projects={projects} isLoading={isLoading || !mounted} />;
 }

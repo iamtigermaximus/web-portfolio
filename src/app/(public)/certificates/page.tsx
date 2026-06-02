@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import CertificatesSection from "@/components/sections/CertificatesSection";
 
@@ -21,10 +21,17 @@ async function fetchCertificates(): Promise<Certificate[]> {
 }
 
 export default function CertificatesPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { data: certificates = [], isLoading } = useQuery({
     queryKey: ["public-certificates"],
     queryFn: fetchCertificates,
+    enabled: mounted,
   });
 
-  return <CertificatesSection certificates={certificates} isLoading={isLoading} />;
+  return <CertificatesSection certificates={certificates} isLoading={isLoading || !mounted} />;
 }

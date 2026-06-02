@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import SkillsSection from "@/components/sections/SkillsSection";
 
@@ -20,10 +20,17 @@ async function fetchSkills(): Promise<Skill[]> {
 }
 
 export default function SkillsPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { data: skills = [], isLoading } = useQuery({
     queryKey: ["public-skills"],
     queryFn: fetchSkills,
+    enabled: mounted,
   });
 
-  return <SkillsSection skills={skills} isLoading={isLoading} />;
+  return <SkillsSection skills={skills} isLoading={isLoading || !mounted} />;
 }
