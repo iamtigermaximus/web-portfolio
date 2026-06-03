@@ -9,7 +9,11 @@ export const metadata: Metadata = {
   description:
     "Full stack developer portfolio showcasing projects, skills, and experience in web development.",
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   openGraph: {
     title: "Portfolio — Full Stack Developer",
