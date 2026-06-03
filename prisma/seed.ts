@@ -282,14 +282,20 @@ async function main() {
   ];
 
   let projectsCreated = 0;
+  let projectsUpdated = 0;
   for (const project of projects) {
     const existing = await prisma.project.findFirst({ where: { title: project.title } });
-    if (!existing) {
+    if (existing) {
+      await prisma.project.update({ where: { id: existing.id }, data: project });
+      projectsUpdated++;
+    } else {
       await prisma.project.create({ data: project });
       projectsCreated++;
     }
   }
-  console.log(`✅ ${projectsCreated} projects seeded (${projects.length - projectsCreated} already existed)`);
+  console.log(
+    `✅ ${projectsCreated} created, ${projectsUpdated} updated (${projects.length} total)`
+  );
 
   // ── Skills ──────────────────────────────────────────
   // Only seed skills if the table is empty (protects existing data)
