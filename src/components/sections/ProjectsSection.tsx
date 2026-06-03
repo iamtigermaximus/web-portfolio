@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
 import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
@@ -140,15 +141,46 @@ const EmptyState = styled.div`
   grid-column: 1 / -1;
 `;
 
+const ViewAllRow = styled.div`
+  text-align: center;
+  margin-top: ${({ theme }) => theme.spacing.xxxl};
+`;
+
+const ShowMoreButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xxl}`};
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: ${({ theme }) => theme.radius.full};
+  background: transparent;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+
+  &:hover {
+    background: rgba(167, 139, 250, 0.08);
+    border-color: rgba(167, 139, 250, 0.4);
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+  }
+`;
+
 interface ProjectsSectionProps {
   projects: Project[];
   isLoading: boolean;
   sectionNumber?: string;
+  initialItems?: number;
+  viewAllHref?: string;
 }
 
-export default function ProjectsSection({ projects, isLoading, sectionNumber }: ProjectsSectionProps) {
+export default function ProjectsSection({ projects, isLoading, sectionNumber, initialItems, viewAllHref }: ProjectsSectionProps) {
   const { ref, isInView } = useScrollReveal();
   const number = sectionNumber ?? "03 // projects";
+  const displayed = initialItems ? projects.slice(0, initialItems) : projects;
+  const hasMore = initialItems && projects.length > initialItems;
 
   if (isLoading) {
     return (
@@ -173,57 +205,66 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber }: 
         {projects.length === 0 ? (
           <EmptyState>No projects to show yet.</EmptyState>
         ) : (
-          <Grid>
-            {projects.map((project, i) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-              >
-                <GlassCard hover>
-                  <ProjectImage $url={normalizeImageUrl(project.imageUrl)}>
-                    {!project.imageUrl && "🚀"}
-                  </ProjectImage>
-                  <ProjectContent>
-                    <ProjectTitle>{project.title}</ProjectTitle>
-                    <ProjectDescription>{project.description}</ProjectDescription>
-                    <Tags>
-                      {project.techStack.slice(0, 5).map((tech) => (
-                        <Badge key={tech} variant="accent">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </Tags>
-                    {(project.liveUrl || project.githubUrl) && (
-                      <Links>
-                        {project.liveUrl && (
-                          <ProjectLink
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <ArrowSquareOut size={16} weight="bold" />
-                            Live
-                          </ProjectLink>
-                        )}
-                        {project.githubUrl && (
-                          <ProjectLink
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <GithubLogo size={16} weight="bold" />
-                            Code
-                          </ProjectLink>
-                        )}
-                      </Links>
-                    )}
-                  </ProjectContent>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </Grid>
+          <>
+            <Grid>
+              {displayed.map((project, i) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                >
+                  <GlassCard hover>
+                    <ProjectImage $url={normalizeImageUrl(project.imageUrl)}>
+                      {!project.imageUrl && "🚀"}
+                    </ProjectImage>
+                    <ProjectContent>
+                      <ProjectTitle>{project.title}</ProjectTitle>
+                      <ProjectDescription>{project.description}</ProjectDescription>
+                      <Tags>
+                        {project.techStack.slice(0, 5).map((tech) => (
+                          <Badge key={tech} variant="accent">
+                            {tech}
+                          </Badge>
+                        ))}
+                      </Tags>
+                      {(project.liveUrl || project.githubUrl) && (
+                        <Links>
+                          {project.liveUrl && (
+                            <ProjectLink
+                              href={project.liveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <ArrowSquareOut size={16} weight="bold" />
+                              Live
+                            </ProjectLink>
+                          )}
+                          {project.githubUrl && (
+                            <ProjectLink
+                              href={project.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <GithubLogo size={16} weight="bold" />
+                              Code
+                            </ProjectLink>
+                          )}
+                        </Links>
+                      )}
+                    </ProjectContent>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </Grid>
+            {hasMore && (
+              <ViewAllRow>
+                <ShowMoreButton as={Link} href={viewAllHref ?? "/projects"}>
+                  See More →
+                </ShowMoreButton>
+              </ViewAllRow>
+            )}
+          </>
         )}
       </motion.div>
     </Wrapper>

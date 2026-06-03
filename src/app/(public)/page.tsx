@@ -17,7 +17,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      <ProjectsSection projects={JSON.parse(JSON.stringify(projects))} isLoading={false} sectionNumber="01 // projects" />
+      <ProjectsSection projects={JSON.parse(JSON.stringify(projects))} isLoading={false} sectionNumber="01 // projects" initialItems={3} viewAllHref="/projects" />
       <SkillsSection skills={JSON.parse(JSON.stringify(skills))} isLoading={false} sectionNumber="02 // skills" />
       <CertificatesSection certificates={JSON.parse(JSON.stringify(certificates))} isLoading={false} sectionNumber="03 // certs" initialItems={3} viewAllHref="/certificates" />
     </>
