@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const projects = await prisma.project.findMany({
+      where: { active: true },
       orderBy: [{ order: "asc" }, { createdAt: "desc" }],
     });
     return NextResponse.json(projects);

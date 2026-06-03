@@ -8,6 +8,7 @@ export interface ProjectData {
   githubUrl: string | null;
   featured: boolean;
   order: number;
+  active: boolean;
   createdAt: string;
   updatedAt: string;
 }

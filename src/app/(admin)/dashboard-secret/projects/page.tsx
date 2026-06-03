@@ -27,6 +27,7 @@ interface Project {
   githubUrl: string | null;
   featured: boolean;
   order: number;
+  active: boolean;
 }
 
 const Header = styled.div`
@@ -129,6 +130,19 @@ export default function AdminProjectsPage() {
     onError: () => toast.error("Failed to save project"),
   });
 
+  const toggleActiveMutation = useMutation({
+    mutationFn: ({ id, active }: { id: string; active: boolean }) =>
+      fetch(`/api/admin/projects/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active }),
+      }).then((r) => r.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
+    },
+    onError: () => toast.error("Failed to toggle project"),
+  });
+
   const deleteMutation = useMutation({
     mutationFn: (id: string) =>
       fetch(`/api/admin/projects/${id}`, { method: "DELETE" }).then((r) =>
@@ -153,6 +167,7 @@ export default function AdminProjectsPage() {
       githubUrl: project.githubUrl || "",
       featured: project.featured,
       order: project.order,
+      active: project.active,
     });
     setModalOpen(true);
   }
@@ -168,6 +183,7 @@ export default function AdminProjectsPage() {
       githubUrl: "",
       featured: false,
       order: 0,
+      active: true,
     });
     setModalOpen(true);
   }
@@ -186,6 +202,21 @@ export default function AdminProjectsPage() {
       ),
     },
     { key: "featured", header: "Featured", render: (p) => p.featured ? "⭐" : "—", width: "80px" },
+    {
+      key: "active",
+      header: "Active",
+      width: "80px",
+      render: (p) => (
+        <input
+          type="checkbox"
+          checked={p.active}
+          onChange={() =>
+            toggleActiveMutation.mutate({ id: p.id, active: !p.active })
+          }
+          style={{ cursor: "pointer", width: 16, height: 16 }}
+        />
+      ),
+    },
     { key: "order", header: "Order", width: "60px" },
   ];
 
@@ -270,6 +301,10 @@ export default function AdminProjectsPage() {
               <CheckboxLabel>
                 <input type="checkbox" {...form.register("featured")} />
                 Featured
+              </CheckboxLabel>
+              <CheckboxLabel style={{ marginTop: 8 }}>
+                <input type="checkbox" {...form.register("active")} />
+                Active
               </CheckboxLabel>
             </div>
           </FormGrid>

@@ -9,7 +9,7 @@ import CertificatesSection from "@/components/sections/CertificatesSection";
 
 export default async function HomePage() {
   const [projects, skills, certificates] = await Promise.all([
-    prisma.project.findMany({ orderBy: { order: "asc" } }),
+    prisma.project.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
     prisma.skill.findMany({ orderBy: { order: "asc" } }),
     prisma.certificate.findMany({ orderBy: { issueDate: "desc" } }),
   ]);

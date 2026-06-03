@@ -9,6 +9,7 @@ export const projectSchema = z.object({
   githubUrl: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
   featured: z.boolean().default(false),
   order: z.number().int().default(0),
+  active: z.boolean().default(true),
 });
 
 export type ProjectFormValues = z.input<typeof projectSchema>;
