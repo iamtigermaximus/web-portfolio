@@ -130,8 +130,7 @@ export default function Footer() {
           </SocialLink>
         </SocialLinks>
         <Copyright>
-          &copy; {year} <Accent>SIEGFRED GAMBOA</Accent> &middot; Built with
-          Next.js &middot; Deployed on Vercel
+          &copy; {year} <Accent>SIEGFRED GAMBOA</Accent> &middot; All rights reserved
         </Copyright>
       </Inner>
     </Wrapper>
