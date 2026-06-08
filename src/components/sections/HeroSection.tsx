@@ -1,196 +1,119 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
-import styled, { keyframes } from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { CaretDown } from "@phosphor-icons/react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
-
-const words = [
-  "Full Stack Developer",
-  "AI Enthusiast",
-  "Problem Solver",
-  "Lifelong Learner",
-];
-
-const gradientShift = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
 
 const Wrapper = styled.section`
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: ${({ theme }) => theme.spacing.xxxl};
   position: relative;
   overflow: hidden;
-  padding: ${({ theme }) => theme.spacing.xxl};
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(167, 139, 250, 0.1), transparent),
-      radial-gradient(ellipse 40% 60% at 80% 80%, rgba(45, 212, 191, 0.06), transparent),
-      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(139, 92, 246, 0.04), transparent);
-    pointer-events: none;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => `${theme.spacing.xxl} ${theme.spacing.lg}`};
   }
 `;
 
 const Content = styled.div`
-  text-align: center;
-  max-width: 720px;
-  z-index: 1;
-`;
-
-const Greeting = styled(motion.p)`
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  color: ${({ theme }) => theme.colors.accent};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.08em;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const Name = styled(motion.h1)`
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: ${({ theme }) => theme.fontWeight.extrabold};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.textPrimary} 0%,
-    ${({ theme }) => theme.colors.primary} 40%,
-    ${({ theme }) => theme.colors.accent} 70%,
-    ${({ theme }) => theme.colors.textPrimary} 100%
-  );
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: ${gradientShift} 6s ease infinite;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.2));
+  font-size: clamp(4rem, 11vw, 9rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  margin: 0;
+  text-transform: uppercase;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: clamp(3rem, 14vw, 5rem);
+  }
 `;
 
-const RoleWrapper = styled.div`
-  height: 2.5rem;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const Rule = styled(motion.div)`
+  width: 80px;
+  height: 3px;
+  background: ${({ theme }) => theme.colors.accent};
+  margin: ${({ theme }) => `${theme.spacing.xl} 0`};
 `;
 
-const Role = styled(motion.span)`
-  font-size: ${({ theme }) => theme.fontSize.lg};
+const Descriptor = styled(motion.p)`
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-weight: ${({ theme }) => theme.fontWeight.normal};
   color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.5;
+  max-width: 480px;
+  letter-spacing: -0.01em;
+`;
+
+const Meta = styled(motion.p)`
   font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.04em;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 const Actions = styled(motion.div)`
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.xxl};
   flex-wrap: wrap;
 `;
 
-const ScrollIndicator = styled(motion.div)`
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: ${({ theme }) => theme.colors.textMuted};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-`;
-
-const bounce = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
-`;
-
-const BouncingIcon = styled.div`
-  animation: ${bounce} 2s ease infinite;
-  display: flex;
-  color: ${({ theme }) => theme.colors.accent};
-`;
-
 export default function HeroSection() {
-  const [wordIndex, setWordIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % words.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
-  const scrollToNext = () => {
-    const el = document.getElementById("projects");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <Wrapper>
       <Content>
-        <Greeting
-          initial={{ opacity: 0, y: 20 }}
+        <Meta
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.5 }}
         >
-          &#123; hello &#125;
-        </Greeting>
+          Developer &amp; Engineer
+        </Meta>
 
         <Name
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.12 }}
-        >
-          Siegfred Gamboa
-        </Name>
-
-        <RoleWrapper>
-          <AnimatePresence mode="wait">
-            <Role
-              key={wordIndex}
-              initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
-              transition={{ duration: 0.35 }}
-            >
-              {words[wordIndex]}
-            </Role>
-          </AnimatePresence>
-        </RoleWrapper>
-
-        <Actions
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          Siegfred
+          <br />
+          Gamboa
+        </Name>
+
+        <Rule
+          initial={{ width: 0 }}
+          animate={{ width: 80 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        />
+
+        <Descriptor
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          I build full-stack applications and AI-powered tools.
+          Focused on clean architecture, thoughtful interfaces,
+          and software that solves real problems.
+        </Descriptor>
+
+        <Actions
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
         >
           <Link href="/projects">
             <Button variant="primary" size="lg">
@@ -204,18 +127,6 @@ export default function HeroSection() {
           </Link>
         </Actions>
       </Content>
-
-      <ScrollIndicator
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        onClick={scrollToNext}
-      >
-        <span>scroll</span>
-        <BouncingIcon>
-          <CaretDown size={18} weight="bold" />
-        </BouncingIcon>
-      </ScrollIndicator>
     </Wrapper>
   );
 }

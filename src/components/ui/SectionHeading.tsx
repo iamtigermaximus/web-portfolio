@@ -11,7 +11,6 @@ interface SectionHeadingProps {
 }
 
 const Wrapper = styled.div<{ $align: "left" | "center" }>`
-  text-align: ${({ $align }) => $align};
   max-width: 640px;
   margin: ${({ $align }) => ($align === "center" ? "0 auto" : "0")};
   margin-bottom: ${({ theme }) => theme.spacing.xxxl};
@@ -23,37 +22,21 @@ const NumberLabel = styled.span`
   font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.accent};
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.xxxl};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.textPrimary};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.textPrimary} 0%,
-    ${({ theme }) => theme.colors.textSecondary} 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: -0.03em;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: ${({ theme }) => theme.fontSize.xxl};
   }
-`;
-
-const Accent = styled.span`
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.primary},
-    ${({ theme }) => theme.colors.accent}
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 `;
 
 const Subtitle = styled.p`
@@ -71,10 +54,7 @@ export default function SectionHeading({
   return (
     <Wrapper $align={align}>
       {number && <NumberLabel>{number}</NumberLabel>}
-      <Title>
-        <Accent>{title.charAt(0)}</Accent>
-        {title.slice(1)}
-      </Title>
+      <Title>{title}</Title>
       {subtitle && <Subtitle>{subtitle}</Subtitle>}
     </Wrapper>
   );

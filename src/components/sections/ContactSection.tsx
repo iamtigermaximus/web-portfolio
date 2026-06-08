@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import SectionHeading from "@/components/ui/SectionHeading";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/GlassCard";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { contactSchema, ContactInput } from "@/lib/validations";
@@ -31,23 +31,19 @@ const Form = styled.form`
 
 const TextArea = styled.textarea`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: ${({ theme }) => theme.radius.sm};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.base};
   font-family: inherit;
   min-height: 140px;
   resize: vertical;
-  transition: all 0.25s ease;
+  transition: border-color 0.15s ease;
   width: 100%;
-  backdrop-filter: blur(8px);
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.glow};
-    background: rgba(255, 255, 255, 0.05);
+    border-color: ${({ theme }) => theme.colors.textPrimary};
   }
 
   &::placeholder {
@@ -85,26 +81,11 @@ export default function ContactSection() {
         throw new Error(err.error || "Something went wrong");
       }
 
-      toast.success("Message sent! I'll get back to you soon.", {
-        style: {
-          background: "#0c1225",
-          color: "#f1f5f9",
-          border: "1px solid rgba(167, 139, 250, 0.2)",
-          borderRadius: "12px",
-        },
-      });
+      toast.success("Message sent! I'll get back to you soon.");
       reset();
     } catch (err) {
       toast.error(
-        err instanceof Error ? err.message : "Failed to send message",
-        {
-          style: {
-            background: "#0c1225",
-            color: "#f1f5f9",
-            border: "1px solid rgba(248, 113, 113, 0.2)",
-            borderRadius: "12px",
-          },
-        }
+        err instanceof Error ? err.message : "Failed to send message"
       );
     }
   }
@@ -123,7 +104,7 @@ export default function ContactSection() {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <GlassCard>
+        <Card>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Input
@@ -156,7 +137,7 @@ export default function ContactSection() {
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
           </Form>
-        </GlassCard>
+        </Card>
       </motion.div>
     </Wrapper>
   );

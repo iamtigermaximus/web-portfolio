@@ -16,34 +16,21 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: ${({ theme }) => theme.colors.bg};
     color: ${({ theme }) => theme.colors.textPrimary};
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
-    position: relative;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167, 139, 250, 0.06), transparent),
-      radial-gradient(ellipse 50% 80% at 20% 50%, rgba(45, 212, 191, 0.03), transparent),
-      radial-gradient(ellipse 50% 80% at 80% 50%, rgba(139, 92, 246, 0.03), transparent);
-    pointer-events: none;
-    z-index: 0;
   }
 
   ::selection {
-    background: rgba(167, 139, 250, 0.4);
-    color: white;
+    background: ${({ theme }) => theme.colors.accent};
+    color: #ffffff;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -51,27 +38,27 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, ${({ theme }) => theme.colors.primaryLight}, ${({ theme }) => theme.colors.accent});
-    border-radius: 3px;
+    background: ${({ theme }) => theme.colors.textMuted};
+    border-radius: 0;
 
     &:hover {
-      background: ${({ theme }) => theme.colors.primary};
+      background: ${({ theme }) => theme.colors.textSecondary};
     }
   }
 
   a {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.textPrimary};
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.primaryHover};
+      color: ${({ theme }) => theme.colors.accent};
     }
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: ${({ theme }) => theme.fontWeight.bold};
-    line-height: 1.15;
+    line-height: 1.1;
     color: ${({ theme }) => theme.colors.textPrimary};
     letter-spacing: -0.02em;
   }
@@ -89,6 +76,7 @@ export const GlobalStyles = createGlobalStyle`
     cursor: pointer;
     border: none;
     outline: none;
+    background: none;
   }
 
   input, textarea, select {

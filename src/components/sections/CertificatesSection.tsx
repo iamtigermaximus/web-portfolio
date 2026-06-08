@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import SectionHeading from "@/components/ui/SectionHeading";
-import GlassCard from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import Spinner from "@/components/ui/Spinner";
@@ -41,52 +40,30 @@ const Grid = styled.div`
 `;
 
 const CertCard = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.025) 0%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: ${({ theme }) => theme.radius.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(12px);
+  transition: all 0.15s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
 
   &:hover {
-    border-color: rgba(45, 212, 191, 0.2);
-    transform: translateY(-3px);
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.4),
-      0 0 25px rgba(45, 212, 191, 0.06);
+    border-color: ${({ theme }) => theme.colors.textPrimary};
   }
 `;
 
 const Thumbnail = styled.div`
   width: 100%;
   height: 160px;
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06));
+  background: ${({ theme }) => theme.colors.cardBorder};
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
   position: relative;
   overflow: hidden;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: linear-gradient(to top, rgba(6, 11, 20, 0.6), transparent);
-    pointer-events: none;
-    z-index: 1;
-  }
 `;
 
 const ThumbImg = styled.img`
@@ -109,6 +86,7 @@ const CertInfo = styled.div`
 const CertName = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.base};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.textPrimary};
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -116,10 +94,9 @@ const CertName = styled.h3`
 `;
 
 const CertIssuer = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-size: 0.75rem;
   color: ${({ theme }) => theme.colors.accent};
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
   letter-spacing: 0.04em;
 `;
 
@@ -131,20 +108,18 @@ const CertDate = styled.p`
 const PdfFrame = styled.iframe`
   width: 100%;
   height: 400px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: ${({ theme }) => theme.radius.md};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 const ModalImage = styled.div<{ $url: string | null }>`
   width: 100%;
   height: 220px;
-  border-radius: ${({ theme }) => theme.radius.md};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   background: ${({ $url, theme }) =>
     $url
       ? `url(${$url}) center/cover no-repeat`
-      : `linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(45, 212, 191, 0.06))`};
+      : theme.colors.cardBorder};
 `;
 
 const ModalIssuer = styled.p`
@@ -172,10 +147,10 @@ const CredentialLink = styled.a`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-size: ${({ theme }) => theme.fontSize.sm};
-  transition: color 0.2s;
+  transition: color 0.15s;
 
   &:hover {
     color: ${({ theme }) => theme.colors.accent};
@@ -193,25 +168,25 @@ const ViewAllRow = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxxl};
 `;
 
-const ShowMoreButton = styled.button`
+const ShowMoreButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xxl}`};
-  border: 1px solid rgba(167, 139, 250, 0.2);
-  border-radius: ${({ theme }) => theme.radius.full};
+  border: 1px solid ${({ theme }) => theme.colors.textPrimary};
   background: transparent;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  cursor: pointer;
-  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.15s ease;
   font-family: inherit;
+  text-decoration: none;
 
   &:hover {
-    background: rgba(167, 139, 250, 0.08);
-    border-color: rgba(167, 139, 250, 0.4);
-    box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+    background: ${({ theme }) => theme.colors.textPrimary};
+    color: ${({ theme }) => theme.colors.bg};
   }
 `;
 
@@ -313,11 +288,11 @@ export default function CertificatesSection({
             {hasMore && (
               <ViewAllRow>
                 {viewAllHref ? (
-                  <ShowMoreButton as={Link} href={viewAllHref}>
+                  <ShowMoreButton href={viewAllHref}>
                     See More →
                   </ShowMoreButton>
                 ) : (
-                  <ShowMoreButton onClick={showMore}>
+                  <ShowMoreButton href="#" onClick={(e) => { e.preventDefault(); showMore(); }}>
                     Show More ↓
                   </ShowMoreButton>
                 )}

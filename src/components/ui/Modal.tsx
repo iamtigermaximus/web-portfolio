@@ -18,21 +18,20 @@ const fadeIn = keyframes`
 `;
 
 const slideUp = keyframes`
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(2, 4, 12, 0.75);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.xl};
-  animation: ${fadeIn} 0.2s ease;
+  animation: ${fadeIn} 0.15s ease;
 `;
 
 const sizes = {
@@ -42,21 +41,13 @@ const sizes = {
 };
 
 const Content = styled.div<{ $size: "sm" | "md" | "lg" }>`
-  background: linear-gradient(
-    180deg,
-    ${({ theme }) => theme.colors.surface} 0%,
-    rgba(12, 18, 37, 0.98) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: ${({ theme }) => theme.radius.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   width: 100%;
   max-width: ${({ $size }) => sizes[$size]};
   max-height: 85vh;
   overflow-y: auto;
-  animation: ${slideUp} 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    0 0 50px rgba(167, 139, 250, 0.04);
+  animation: ${slideUp} 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
 const Header = styled.div`
@@ -64,24 +55,22 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.xl};
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `;
 
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const CloseButton = styled.button`
-  background: rgba(255, 255, 255, 0.04);
   color: ${({ theme }) => theme.colors.textSecondary};
   padding: ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  transition: all 0.2s;
+  transition: color 0.15s;
 
   &:hover {
     color: ${({ theme }) => theme.colors.textPrimary};
-    background: rgba(255, 255, 255, 0.08);
   }
 `;
 

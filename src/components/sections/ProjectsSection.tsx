@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
 import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
 import SectionHeading from "@/components/ui/SectionHeading";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import Spinner from "@/components/ui/Spinner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -42,10 +42,9 @@ const Grid = styled.div`
 const ProjectImage = styled.div<{ $url: string | null }>`
   width: 100%;
   height: 200px;
-  border-radius: ${({ theme }) => theme.radius.md};
   overflow: hidden;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-  position: relative;
+  background: ${({ theme }) => theme.colors.cardBorder};
 
   ${({ $url }) =>
     $url
@@ -53,29 +52,12 @@ const ProjectImage = styled.div<{ $url: string | null }>`
           background: url(${$url}) center/cover no-repeat;
         `
       : css`
-          background: linear-gradient(
-            135deg,
-            rgba(167, 139, 250, 0.15),
-            rgba(45, 212, 191, 0.08)
-          );
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 2.5rem;
-          border: 1px solid rgba(255, 255, 255, 0.04);
+          border: 1px solid ${({ theme }) => theme.colors.cardBorder};
         `}
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(6, 11, 20, 0.4) 0%,
-      transparent 50%
-    );
-    pointer-events: none;
-  }
 `;
 
 const ProjectContent = styled.div`
@@ -88,11 +70,13 @@ const ProjectContent = styled.div`
 const ProjectTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const ProjectDescription = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
   line-height: 1.7;
+  color: ${({ theme }) => theme.colors.textSecondary};
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -110,7 +94,7 @@ const Links = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: auto;
   padding-top: ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `;
 
 const ProjectLink = styled.a`
@@ -120,17 +104,11 @@ const ProjectLink = styled.a`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.textSecondary};
-  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.25s ease;
+  padding: ${({ theme }) => `${theme.spacing.sm} 0`};
+  transition: color 0.15s ease;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-    border-color: rgba(167, 139, 250, 0.3);
-    background: rgba(167, 139, 250, 0.08);
-    box-shadow: 0 0 15px rgba(167, 139, 250, 0.08);
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
@@ -146,25 +124,25 @@ const ViewAllRow = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxxl};
 `;
 
-const ShowMoreButton = styled.button`
+const ShowMoreButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xxl}`};
-  border: 1px solid rgba(167, 139, 250, 0.2);
-  border-radius: ${({ theme }) => theme.radius.full};
+  border: 1px solid ${({ theme }) => theme.colors.textPrimary};
   background: transparent;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  cursor: pointer;
-  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.15s ease;
   font-family: inherit;
+  text-decoration: none;
 
   &:hover {
-    background: rgba(167, 139, 250, 0.08);
-    border-color: rgba(167, 139, 250, 0.4);
-    box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+    background: ${({ theme }) => theme.colors.textPrimary};
+    color: ${({ theme }) => theme.colors.bg};
   }
 `;
 
@@ -210,11 +188,11 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber, in
               {displayed.map((project, i) => (
                 <motion.div
                   key={project.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
                 >
-                  <GlassCard hover>
+                  <Card hover>
                     <ProjectImage $url={normalizeImageUrl(project.imageUrl)}>
                       {!project.imageUrl && "🚀"}
                     </ProjectImage>
@@ -223,7 +201,7 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber, in
                       <ProjectDescription>{project.description}</ProjectDescription>
                       <Tags>
                         {project.techStack.slice(0, 5).map((tech) => (
-                          <Badge key={tech} variant="accent">
+                          <Badge key={tech} variant="muted">
                             {tech}
                           </Badge>
                         ))}
@@ -253,13 +231,13 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber, in
                         </Links>
                       )}
                     </ProjectContent>
-                  </GlassCard>
+                  </Card>
                 </motion.div>
               ))}
             </Grid>
             {hasMore && (
               <ViewAllRow>
-                <ShowMoreButton as={Link} href={viewAllHref ?? "/projects"}>
+                <ShowMoreButton href={viewAllHref ?? "/projects"}>
                   See More →
                 </ShowMoreButton>
               </ViewAllRow>

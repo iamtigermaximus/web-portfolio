@@ -18,10 +18,10 @@ export default function AppProviders({
           position="bottom-right"
           toastOptions={{
             style: {
-              background: "#1e293b",
-              color: "#f8fafc",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "12px",
+              background: "#0a0a0a",
+              color: "#fafafa",
+              border: "1px solid #e5e5e5",
+              borderRadius: "0",
             },
           }}
         />

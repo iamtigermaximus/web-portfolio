@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 import SectionHeading from "@/components/ui/SectionHeading";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/GlassCard";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const Wrapper = styled.section`
@@ -41,13 +41,10 @@ const AvatarColumn = styled.div`
 const AvatarWrapper = styled.div`
   width: 180px;
   height: 180px;
-  border-radius: ${({ theme }) => theme.radius.full};
-  border: 2px solid rgba(167, 139, 250, 0.25);
+  border-radius: 50%;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   overflow: hidden;
   position: relative;
-  box-shadow:
-    0 0 30px rgba(167, 139, 250, 0.15),
-    0 0 60px rgba(45, 212, 191, 0.06);
 
   img {
     object-fit: cover;
@@ -77,18 +74,13 @@ const SocialLink = styled.a`
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   color: ${({ theme }) => theme.colors.textSecondary};
-  transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
+  transition: all 0.15s ease;
 
   &:hover {
-    background: rgba(167, 139, 250, 0.12);
-    border-color: rgba(167, 139, 250, 0.3);
-    color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 20px rgba(167, 139, 250, 0.15);
+    border-color: ${({ theme }) => theme.colors.textPrimary};
+    color: ${({ theme }) => theme.colors.textPrimary};
   }
 `;
 
@@ -109,7 +101,7 @@ export default function AboutSection() {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <GlassCard>
+        <Card>
           <Content>
             <AvatarColumn>
               <AvatarWrapper>
@@ -164,7 +156,7 @@ export default function AboutSection() {
               </BioText>
             </Bio>
           </Content>
-        </GlassCard>
+        </Card>
       </motion.div>
     </Wrapper>
   );

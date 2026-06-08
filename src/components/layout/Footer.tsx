@@ -5,30 +5,9 @@ import styled from "styled-components";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 
 const Wrapper = styled.footer`
-  position: relative;
   padding: ${({ theme }) => `${theme.spacing.xxxl} ${theme.spacing.xxl}`};
   text-align: center;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(12, 18, 37, 0.3) 100%
-  );
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      ${({ theme }) => theme.colors.primary},
-      ${({ theme }) => theme.colors.accent},
-      transparent
-    );
-  }
+  border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `;
 
 const Inner = styled.div`
@@ -42,18 +21,11 @@ const Inner = styled.div`
 
 const Logo = styled.p`
   font-family: 'JetBrains Mono', monospace;
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  letter-spacing: 0.06em;
-  background: linear-gradient(
-    135deg,
-    ${({ theme }) => theme.colors.primary} 0%,
-    ${({ theme }) => theme.colors.accent} 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 10px ${({ theme }) => theme.colors.glow});
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  letter-spacing: 0.08em;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  text-transform: uppercase;
 `;
 
 const Tagline = styled.p`
@@ -74,19 +46,13 @@ const SocialLink = styled.a`
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(255, 255, 255, 0.03);
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   color: ${({ theme }) => theme.colors.textSecondary};
-  transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
+  transition: all 0.15s ease;
 
   &:hover {
-    background: rgba(167, 139, 250, 0.12);
-    border-color: rgba(167, 139, 250, 0.3);
-    color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 20px ${({ theme }) => theme.colors.glow};
-    transform: translateY(-2px);
+    border-color: ${({ theme }) => theme.colors.textPrimary};
+    color: ${({ theme }) => theme.colors.textPrimary};
   }
 `;
 
@@ -106,7 +72,7 @@ export default function Footer() {
   return (
     <Wrapper>
       <Inner>
-        <Logo>SIEGFRED GAMBOA</Logo>
+        <Logo>Siegfred Gamboa</Logo>
         <Tagline>
           Full stack developer building at the intersection of craftsmanship,
           curiosity, and AI.
@@ -130,7 +96,7 @@ export default function Footer() {
           </SocialLink>
         </SocialLinks>
         <Copyright>
-          &copy; {year} <Accent>SIEGFRED GAMBOA</Accent> &middot; All rights reserved
+          &copy; {year} <Accent>Siegfred Gamboa</Accent> &middot; All rights reserved
         </Copyright>
       </Inner>
     </Wrapper>

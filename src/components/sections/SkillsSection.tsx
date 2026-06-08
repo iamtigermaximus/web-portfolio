@@ -12,7 +12,7 @@ import {
   Palette,
 } from "@phosphor-icons/react";
 import SectionHeading from "@/components/ui/SectionHeading";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/GlassCard";
 import ProficiencyBar from "@/components/ui/ProficiencyBar";
 import Spinner from "@/components/ui/Spinner";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -53,24 +53,23 @@ const Tabs = styled.div`
 
 const Tab = styled.button<{ $active: boolean }>`
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.xl}`};
-  border-radius: ${({ theme }) => theme.radius.full};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   background: ${({ $active, theme }) =>
-    $active
-      ? `linear-gradient(135deg, ${theme.colors.primaryLight}, ${theme.colors.primary})`
-      : "rgba(255, 255, 255, 0.03)"};
-  color: ${({ $active }) => ($active ? "white" : "#94a3b8")};
+    $active ? theme.colors.textPrimary : "transparent"};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors.bg : theme.colors.textSecondary};
   border: 1px solid
     ${({ $active, theme }) =>
-      $active ? theme.colors.primary : "rgba(255, 255, 255, 0.06)"};
-  transition: all 0.25s ease;
+      $active ? theme.colors.textPrimary : theme.colors.cardBorder};
+  transition: all 0.15s ease;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: ${({ $active, theme }) =>
-      $active ? "" : `0 0 15px ${theme.colors.glow}`};
+    border-color: ${({ theme }) => theme.colors.textPrimary};
   }
 `;
 
@@ -90,10 +89,7 @@ const SkillHeader = styled.div`
 const SkillIcon = styled.div`
   width: 42px;
   height: 42px;
-  border-radius: ${({ theme }) => theme.radius.sm};
-  background: rgba(167, 139, 250, 0.1);
-  border: 1px solid rgba(167, 139, 250, 0.15);
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textPrimary};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -183,7 +179,7 @@ export default function SkillsSection({ skills, isLoading, sectionNumber }: Skil
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.3, delay: i * 0.05 }}
                   >
-                    <GlassCard hover>
+                    <Card hover>
                       <SkillHeader>
                         <SkillIcon>
                           <IconComponent size={20} weight="bold" />
@@ -192,7 +188,7 @@ export default function SkillsSection({ skills, isLoading, sectionNumber }: Skil
                         <SkillLevel>{skill.proficiencyLevel}%</SkillLevel>
                       </SkillHeader>
                       <ProficiencyBar level={skill.proficiencyLevel} animated={isInView} />
-                    </GlassCard>
+                    </Card>
                   </motion.div>
                 );
               })}
