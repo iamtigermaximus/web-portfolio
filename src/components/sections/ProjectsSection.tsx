@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
@@ -73,14 +73,36 @@ const ProjectTitle = styled.h3`
   color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
-const ProjectDescription = styled.p`
+const ProjectDescription = styled.p<{ $expanded: boolean }>`
   font-size: ${({ theme }) => theme.fontSize.sm};
   line-height: 1.7;
   color: ${({ theme }) => theme.colors.textSecondary};
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin: 0;
+
+  ${({ $expanded }) =>
+    !$expanded &&
+    css`
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    `}
+`;
+
+const ExpandToggle = styled.button`
+  display: inline-block;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.accent};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin-top: ${({ theme }) => theme.spacing.xs};
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Tags = styled.div`
@@ -156,9 +178,19 @@ interface ProjectsSectionProps {
 
 export default function ProjectsSection({ projects, isLoading, sectionNumber, initialItems, viewAllHref }: ProjectsSectionProps) {
   const { ref, isInView } = useScrollReveal();
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const number = sectionNumber ?? "03 // projects";
   const displayed = initialItems ? projects.slice(0, initialItems) : projects;
   const hasMore = initialItems && projects.length > initialItems;
+
+  const toggleDescription = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   if (isLoading) {
     return (
@@ -198,9 +230,16 @@ export default function ProjectsSection({ projects, isLoading, sectionNumber, in
                     </ProjectImage>
                     <ProjectContent>
                       <ProjectTitle>{project.title}</ProjectTitle>
-                      <ProjectDescription>{project.description}</ProjectDescription>
+                      <ProjectDescription $expanded={expandedIds.has(project.id)}>
+                        {project.description}
+                      </ProjectDescription>
+                      {project.description && project.description.length > 150 && (
+                        <ExpandToggle onClick={() => toggleDescription(project.id)}>
+                          {expandedIds.has(project.id) ? "Show less" : "Show more"}
+                        </ExpandToggle>
+                      )}
                       <Tags>
-                        {project.techStack.slice(0, 5).map((tech) => (
+                        {project.techStack.map((tech) => (
                           <Badge key={tech} variant="muted">
                             {tech}
                           </Badge>
